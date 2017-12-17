@@ -5,7 +5,7 @@
  * Computer Science & Engineering
  * Seon Namkung
  *
- * LRU Cache
+ * FIFO cache.
  *
  */
 
@@ -62,8 +62,8 @@ void init_cache(){
  */
 void insert_at_first(Node * node){
         Node * temp = cache->header;
-        if(cache->total_size >= MAX_CACHE_SIZE){
-          delete_at_last();
+        if(cache->total_size >= MAX_CACHE_SIZE) {
+                delete_at_last();
         }
 
         node->next = temp->next;
@@ -77,14 +77,14 @@ void insert_at_first(Node * node){
  * Return deleted node.
  */
 Node * delete_at_last(){
-        if(cache->total_size ==0){
-          return NULL;
+        if(cache->total_size ==0) {
+                return NULL;
         }
         Node * node = cache->header;
         Node * temp;
 
-        for(int i =0;i<cache->total_size-1;i++){
-          node = node->next;
+        for(int i =0; i<cache->total_size-1; i++) {
+                node = node->next;
         }
         temp = node->next;
         node->next = node->next->next;
@@ -96,16 +96,16 @@ Node * delete_at_last(){
 
 /*
  * Find object in cache by order.
- * If find, return the node same with node_name;
+ * If find, return the node;
  * If not, return Null
  */
 Node * find_Node(int order){
-        if(order > cache->total_size){
-          return NULL;
+        if(order > cache->total_size) {
+                return NULL;
         }
         Node * node = cache->header;
-        for(int i =0;i<order;i++){
-          node = node->next;
+        for(int i =0; i<order; i++) {
+                node = node->next;
         }
         return node;
 }

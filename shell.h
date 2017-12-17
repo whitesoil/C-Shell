@@ -1,3 +1,13 @@
+/*
+ *
+ * Last modified : 2017.12.17
+ * Hanyang University
+ * Computer Science & Engineering
+ * Seon Namkung
+ *
+ * Header of Shell
+ *
+ */
 #ifndef __MAIN__
 #define __MAIN__
 
@@ -10,11 +20,10 @@
 #include <unistd.h>
 
 int process();
-void str_tokenizer(char * ,char ** );
+void str_tokenizer(char *,char ** );
 int semicolon_tokenizer(char *,char **);
-int redirect_tokenizer(char * ,char ** );
-void * bg_checker(char * );
-int semicolon_checker(char * );
+int pipe_tokenizer(char *,char **);
+int redirect_tokenizer(char *,char ** );
 
 #define MSG 256
 

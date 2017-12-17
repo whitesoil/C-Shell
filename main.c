@@ -5,7 +5,7 @@
  * Computer Science & Engineering
  * Seon Namkung
  *
- *
+ *  Main function.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,11 +14,9 @@
 extern int process();
 extern void init_cache();
 
-#define MSG 255
-
 int main(int argc, char*argv[],char * envp[]){
-  init_cache();
-  while(1){
-    process();
-  }
+        init_cache();
+        while(1) {
+                process();
+        }
 }
