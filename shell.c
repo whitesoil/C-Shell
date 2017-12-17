@@ -5,11 +5,10 @@
  * Computer Science & Engineering
  * Seon Namkung
  *
- * C Linux Shell
+ * C Linux Shell source
  *
  */
 #include "shell.h"
-#include "cache.h"
 
 int process(){
         char cwd[MSG];              //Current working directory.

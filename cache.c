@@ -1,3 +1,15 @@
+/*
+ *
+ * Last modified : 2017.12.017
+ * Hanyang University
+ * Computer Science & Engineering
+ * Seon Namkung
+ *
+ * FIFO cache source file.
+ *
+ */
+
+#include "cache.h"
 
 /*
  * Initiate Cache
@@ -8,17 +20,13 @@ void init_cache(){
         Node * header = (Node *)malloc(sizeof(Node));
         Node * trailer = (Node *)malloc(sizeof(Node));
 
-        header->prev = NULL;
+
         header->next = trailer;
-        trailer->prev = header;
         trailer->next = NULL;
 
-        strcpy(header->name,"/Header\0");
-        header->contents = NULL;
-        header->size = -1;
-        strcpy(trailer->name,"/Trailer\0");
-        trailer->contents = NULL;
-        trailer->size = -1;
+        strcpy(header->command,"/Header\0");
+        strcpy(trailer->command,"/Trailer\0");
+
 
         cache->header = header;
         cache->trailer = trailer;
@@ -32,13 +40,14 @@ void init_cache(){
  */
 void insert_at_first(Node * node){
         Node * temp = cache->header;
+        if(cache->total_size >= MAX_CACHE_SIZE) {
+                delete_at_last();
+        }
 
         node->next = temp->next;
-        temp->next->prev = node;
         temp->next = node;
-        node->prev = temp;
 
-        cache->total_size += node->size;
+        cache->total_size++;
 }
 
 /*
@@ -46,59 +55,47 @@ void insert_at_first(Node * node){
  * Return deleted node.
  */
 Node * delete_at_last(){
-        Node * temp = cache->header;
-        while(temp->next->size != -1) {
-                temp = temp->next;
-        }
-        if(temp->size == -1) {
+        if(cache->total_size ==0) {
                 return NULL;
         }
+        Node * node = cache->header;
+        Node * temp;
 
-        temp->prev->next = temp->next;
-        temp->next->prev = temp->prev;
+        for(int i =0; i<cache->total_size-1; i++) {
+                node = node->next;
+        }
+        temp = node->next;
+        node->next = node->next->next;
 
-        cache->total_size -= temp->size;
+        cache->total_size--;
 
         return temp;
 }
 
 /*
- * Cache hit, move the hitted node at first.
- */
-void move_to_first(Node * node){
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
-
-        insert_at_first(node);
-
-        return;
-}
-
-/*
- * Find object in cache by name.
- * If find, return the node same with node_name;
+ * Find object in cache by order.
+ * If find, return the node;
  * If not, return Null
  */
-Node * find_Node(char * node_name){
-        Node * temp = cache->header->next;
-
-        while(temp->size != -1) {
-                if(strcmp(temp->name,node_name) == 0) {
-                        return temp;
-                }
-                temp = temp->next;
+Node * find_Node(int order){
+        if(order > cache->total_size) {
+                return NULL;
         }
-        return NULL;
+        Node * node = cache->header;
+        for(int i =0; i<order; i++) {
+                node = node->next;
+        }
+        return node;
 }
 
 /*
  * Print cached nodes in cache.
  */
 void print_cache(){
-        Node * temp = cache->header->next;
-        while(temp->size != -1) {
-                printf("%s : %d -> ",temp->name,temp->size);
-                temp = temp->next;
+        Node * node = cache->header;
+        while(node->next != NULL) {
+                printf("%s-> ",node->command);
+                node = node->next;
         }
         fputs("Trailer\n",stdout);
         return;
